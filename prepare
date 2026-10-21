@@ -1,0 +1,25 @@
+#!/bin/sh
+
+disksel(){
+printf "\n\033[34mSelect drive for example /dev/sda for sata and\n/dev/nvme0n1 for nvme\n\033[0mDrive?: "
+read SELECTION_DISK
+}
+partition(){
+clear
+printf "\033[32mPartitioning disks\033[0m\n"
+printf "\033[34mPlease make sure that your disks are partitioned\nwith fdisk (advanced) or cfdisk (easier) program\nso we can continue. Do you want to run:\n\033[0m\ncfdisk (Press C)\nfdisk (Press F)\ncontinue without partitioning (Press N)\n"
+printf "Selection: "
+read -N 1 SELECTION_PARTITIONING
+printf "\n"
+case $SELECTION_PARTITIONING in
+	"N"|"n") break;;
+	"C"|"c") disksel; cfdisk $SELECTION_DISK; break;;
+	"F"|"f") disksel; fdisk $SELECTION_DISK; break;;
+	*)clear; printf "\033[31mError: Please make N|C|F choice.\033[0m\n"; sleep 5s; partition;;
+esac
+
+}
+partition
+
+
+
